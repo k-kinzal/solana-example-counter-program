@@ -20,25 +20,25 @@ impl Processor {
     }
 
     fn process_increment(_program_id: &Pubkey, accounts: &[AccountInfo]) -> ProgramResult {
-        let account_iter = &mut accounts.iter();
-        let account = next_account_info(account_iter)?;
+        let mut account_iter = accounts.iter();
+        let account = next_account_info(&mut account_iter)?;
 
-        let data = &mut account.data.borrow_mut();
+        let mut data = account.data.borrow_mut();
         let mut state = State::unpack_from_slice(&data)?;
         state.0 = state.0 + 1;
-        state.pack_into_slice(data);
+        state.pack_into_slice(&mut data);
 
         Ok(())
     }
 
     fn process_decrement(_program_id: &Pubkey, accounts: &[AccountInfo]) -> ProgramResult {
-        let account_iter = &mut accounts.iter();
-        let account = next_account_info(account_iter)?;
+        let mut account_iter = accounts.iter();
+        let account = next_account_info(&mut account_iter)?;
 
-        let data = &mut account.data.borrow_mut();
+        let mut data = account.data.borrow_mut();
         let mut state = State::unpack_from_slice(&data)?;
         state.0 = state.0 - 1;
-        state.pack_into_slice(data);
+        state.pack_into_slice(&mut data);
 
         Ok(())
     }
